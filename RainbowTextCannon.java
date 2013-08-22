@@ -10,6 +10,7 @@ public class RainbowTextCannon extends JPanel
     JButton cannon_launcher; //The submit button
     JTextPane impact_zone; //The text area that displays a "preview" of the coloured text
     JTextArea clipboard; //The text area the displays the vBulletin colour-coded text to copy-paste to Pojo
+    JLabel loader_label, zone_label, forum_label; //a bunch of labels
     StyledDocument doc;
     
     //HSV values
@@ -23,14 +24,26 @@ public class RainbowTextCannon extends JPanel
 
     public RainbowTextCannon()
     {
+        this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+        
+        loader_panel = new JPanel();
+        loader_panel.setLayout(new BoxLayout(loader_panel, BoxLayout.X_AXIS));
         cannon_loader = new JTextField(50);
         cannon_launcher = new JButton("Fire Skittles Text");
+        loader_label = new JLabel("Load the cannon with the text here:");
+        zone_label = new JLabel("Preview: ");
+        forum_label = new JLabel("Copy-paste this text to Pojo: ");
         doc = (StyledDocument) new DefaultStyledDocument();
         impact_zone = new JTextPane(doc);
         clipboard = new JTextArea(300,300);
-        this.add(cannon_loader);
+        
+        this.add(loader_panel);
+        loader_panel.add(loader_label);
+        loader_panel.add(cannon_loader);
         this.add(cannon_launcher);
+        this.add(zone_label);
         this.add(impact_zone);
+        this.add(forum_label);
         this.add(clipboard);
 
         cannon_launcher.addActionListener(new CannonListener());
