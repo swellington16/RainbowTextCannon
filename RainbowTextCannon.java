@@ -12,6 +12,7 @@ public class RainbowTextCannon extends JPanel
     JTextArea clipboard; //The text area the displays the vBulletin colour-coded text to copy-paste to Pojo
     JLabel loader_label, zone_label, forum_label; //a bunch of labels
     StyledDocument doc;
+    JPanel loader_panel; 
     
     //HSV values
     final float RAINBOW_INIT = 0.0f; //minimum hue
