@@ -6,23 +6,23 @@ import javax.swing.text.*;
 
 public class RainbowTextCannon extends JPanel
 {
-    JTextField cannon_loader;
-    JButton cannon_launcher;
-    JTextPane impact_zone;
-    JTextArea clipboard;
+    JTextField cannon_loader; //The textfield in which you enter the text to colourize
+    JButton cannon_launcher; //The submit button
+    JTextPane impact_zone; //The text area that displays a "preview" of the coloured text
+    JTextArea clipboard; //The text area the displays the vBulletin colour-coded text to copy-paste to Pojo
     StyledDocument doc;
+    
+    //HSV values
     final float RAINBOW_INIT = 0.0f; //minimum hue
     final float RAINBOW_END = 1.0f; //maximum hue
     final float SATURATION = 1.0f; //saturation
     final float VALUE = 1.0f; //value
-    final double RAINBOW_INC = 0.005f; 
+    
+    final double RAINBOW_INC = 0.005f; //Value by which rainbow hue is incremented with each character
 
-    //Color[] colors = new Color[RAINBOW];
 
     public RainbowTextCannon()
     {
-        
-
         cannon_loader = new JTextField(50);
         cannon_launcher = new JButton("Fire Skittles Text");
         doc = (StyledDocument) new DefaultStyledDocument();
@@ -37,7 +37,7 @@ public class RainbowTextCannon extends JPanel
     }
     
     
-    
+    //Converts the color to its corresponding hexcode
     public String toHex(Color color)
     {
         String red = Integer.toHexString(color.getRed());
@@ -63,6 +63,7 @@ public class RainbowTextCannon extends JPanel
         return hexcode;
     }
     
+    //Converts the color to its corresponding vBulletin tags
     public String getColored(String str, Color color)
     {
         String result;
@@ -73,21 +74,23 @@ public class RainbowTextCannon extends JPanel
 
     private class CannonListener implements ActionListener
     {
-        public void actionPerformed(ActionEvent ae)
+        public void actionPerformed(ActionEvent ae) //Event when button is clicked
         {
-            clipboard.setText("");
-            impact_zone.setText(cannon_loader.getText());
+            clipboard.setText(""); //Refresh vBulletin text area
+            impact_zone.setText(cannon_loader.getText()); //
             String str = impact_zone.getText();
             float index = RAINBOW_INIT;
             for(int i = 0; i < str.length(); i++)
             {
                 String x = Character.toString(str.charAt(i));
-                if(!(x.equals(" ")))
+                if(!(x.equals(" "))) //Accounts for spaces
                 {
                     float ind = index % RAINBOW_END;
-                    Color hue = Color.getHSBColor(ind,SATURATION,VALUE);
-                    String coloredChar = getColored(x,hue);
-                    clipboard.setText(clipboard.getText() + coloredChar);
+                    Color hue = Color.getHSBColor(ind,SATURATION,VALUE); //Get colour from specific hue
+                    String coloredChar = getColored(x,hue); //Wrap character with vBulletin tags for current hue
+                    clipboard.setText(clipboard.getText() + coloredChar); //Append wrapped character to vBulletin text
+                    
+                    //Generate and display coloured version of each character in the JTextPane
                     Style style = impact_zone.addStyle("Hue",null);
                     StyleConstants.setForeground(style,hue);
                     doc.setCharacterAttributes(i,str.length(),impact_zone.getStyle("Hue"),true);
