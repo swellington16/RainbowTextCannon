@@ -12,7 +12,7 @@ public class RainbowTextCannon extends JPanel
     JTextArea clipboard; //The text area the displays the vBulletin colour-coded text to copy-paste to Pojo
     JLabel loader_label, zone_label, forum_label; //a bunch of labels
     StyledDocument doc;
-    JPanel loader_panel; 
+    JPanel loader_panel,preview_panel,forum_panel;
     
     //HSV values
     final float RAINBOW_INIT = 0.0f; //minimum hue
@@ -25,28 +25,42 @@ public class RainbowTextCannon extends JPanel
 
     public RainbowTextCannon()
     {
-        this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        //this.setPreferredSize(new Dimension(300,300));
         
         loader_panel = new JPanel();
-        loader_panel.setLayout(new BoxLayout(loader_panel, BoxLayout.X_AXIS));
-        cannon_loader = new JTextField(50);
+        preview_panel = new JPanel();
+        forum_panel = new JPanel();
+        loader_panel.setSize(100,100);
+        //loader_panel.setLayout(new BoxLayout(loader_panel, BoxLayout.X_AXIS));
+        //forum_panel.setLayout(new GridLayout(2,1));
+        
+        cannon_loader = new JTextField(10);
         cannon_launcher = new JButton("Fire Skittles Text");
         loader_label = new JLabel("Load the cannon with the text here:");
         zone_label = new JLabel("Preview: ");
         forum_label = new JLabel("Copy-paste this text to Pojo: ");
         doc = (StyledDocument) new DefaultStyledDocument();
         impact_zone = new JTextPane(doc);
-        clipboard = new JTextArea(300,300);
+        clipboard = new JTextArea(20,50);
         
         this.add(loader_panel);
         loader_panel.add(loader_label);
         loader_panel.add(cannon_loader);
-        this.add(cannon_launcher);
-        this.add(zone_label);
-        this.add(impact_zone);
-        this.add(forum_label);
-        this.add(clipboard);
-
+        loader_panel.add(cannon_launcher);
+        
+        this.add(preview_panel);
+        preview_panel.add(zone_label);
+        preview_panel.add(impact_zone);
+        
+        this.add(forum_panel);
+        forum_panel.add(forum_label);
+        forum_panel.add(clipboard);
+        
+        clipboard.setLineWrap(true); 
+        clipboard.setWrapStyleWord(true);
+        clipboard.setPreferredSize(new Dimension(50,50));
+        clipboard.setSize(clipboard.getPreferredSize());
         cannon_launcher.addActionListener(new CannonListener());
     }
     
@@ -71,9 +85,9 @@ public class RainbowTextCannon extends JPanel
             green = "0"+green;
         }
         
-        System.out.println("("+red+","+green+","+blue+")"); //debugging
+        //System.out.println("("+red+","+green+","+blue+")"); //debugging
         String hexcode = "#"+red+green+blue;
-        System.out.println(hexcode+"\n"); //debugging
+        //System.out.println(hexcode+"\n"); //debugging
         return hexcode;
     }
     
@@ -82,7 +96,7 @@ public class RainbowTextCannon extends JPanel
     {
         String result;
         String hexcode = toHex(color);
-        result = "[color=\""+hexcode+"\"]"+str+"[/color]"; 
+        result = "[color=\""+hexcode+"\"]"+str+"[/color]";
         return result;
     }
 
@@ -122,7 +136,7 @@ public class RainbowTextCannon extends JPanel
     {
         JFrame frame = new JFrame();
         RainbowTextCannon cannon = new RainbowTextCannon();
-        frame.setSize(300,300);
+        frame.setSize(600,600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(cannon);
         frame.setVisible(true);
